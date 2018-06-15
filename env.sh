@@ -49,7 +49,7 @@ case $HOSTNAME in
 	# We're assuming that we have GROMACS installed and in our path, here.
 	module load anaconda
 	source activate WESTPA-WExplore
-	source /home/lilith/apps/anaconda/envs/WESTPA-WExplore/westpa-2017.10/westpa.sh
+	source $CONDA_PREFIX/westpa-2017.10/westpa.sh
 	export USE_LOCAL_SCRATCH=1
 	export SCRATCH=/tmp
 

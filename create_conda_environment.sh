@@ -15,7 +15,11 @@ conda create --name WESTPA-WExplore
 conda install -c conda-forge westpa -n WESTPA-WExplore
 conda install -c BjornFJohansson networkx=1.9.1 -n WESTPA-WExplore
 conda install -c anaconda pandas -n WESTPA-WExplore
+conda install -c anaconda cython -n WESTPA-WExplore
 
 # Create symlinks that we need to ensure everything imports/starts.
+# You'll probably need to run python setup.py within this directory, as well.
 ln -sv wexplore-westpa.josh/wexplore wexplore
-ln -sv ../bstates.bound bstates
+cd wexplore
+python setup.py build --prefix .
+ln -sv lib/python2.7/site-packages/wex_utils.so .
