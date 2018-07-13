@@ -1,0 +1,3 @@
+[submodule "wexplore-westpa.josh"]
+	path = wexplore-westpa.josh
+	url = https://github.com/synapticarbors/wexplore-westpa
