@@ -6,12 +6,10 @@ import numpy as np
 setup(
     name='westpa_wexplore',
     version='0.1',
-    py_modules=['wexplore.wexplore'],
-    packages=find_packages(),
-    include_package_data=True,
+    packages=['westpa_wexplore'],
     install_requires=[
         'numpy'
     ],
     include_dirs=[np.get_include()],
-    ext_modules = cythonize("wexplore/wex_utils.pyx","examples/RingPotential/modelsim.pyx")
+    ext_modules = cythonize("westpa_wexplore/wex_utils.pyx","examples/RingPotential/modelsim.pyx")
 )

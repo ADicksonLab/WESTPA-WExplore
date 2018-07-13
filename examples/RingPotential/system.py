@@ -9,7 +9,7 @@ from west import Segment, WESTSystem
 from westpa.binning import FuncBinMapper
 
 import modelsim
-import wexplore
+from westpa_wexplore import wexplore
 
 import logging
 log = logging.getLogger(__name__)

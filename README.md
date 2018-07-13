@@ -20,6 +20,12 @@ and run `setup.py`:
 python setup.py install
 ```
 
+Then add the `westpa_wexplore` directory to the `$WEST_PYTHONPATH` variable (in bash):
+
+```
+export WEST_PYTHONPATH=`ls -lrt -d -1 $PWD/westpa_wexplore`
+```
+
 # Dependencies
 
 # Contributors
