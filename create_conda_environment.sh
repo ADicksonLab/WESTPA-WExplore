@@ -25,5 +25,5 @@ conda install -c anaconda cython -n WESTPA-WExplore
 source activate WESTPA-WExplore
 cd westpa_wexplore
 #python setup.py install
-python setup.py build --prefix .
+python setup.py build
 #ln -sv lib/python2.7/site-packages/wex_utils.so .

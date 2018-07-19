@@ -50,6 +50,8 @@ case $HOSTNAME in
 	module load anaconda
 	source activate WESTPA-WExplore
 	source $CONDA_PREFIX/westpa-2017.10/westpa.sh
+    export GROMACS_ROOT='/ihome/lchong/ajp105/apps/gromacs-4.6.3-gcc-sse4.1/'
+    export PATH="$GROMACS_ROOT/bin/:$PATH"
 	export USE_LOCAL_SCRATCH=1
 	export SCRATCH=/tmp
 
@@ -72,6 +74,7 @@ export GRMS=$GROMACS_ROOT/bin/g_rms
 export TRJCONV=$GROMACS_ROOT/bin/trjconv
 export GMINDIST=$GROMACS_ROOT/bin/g_mindist
 export GRAMA=$GROMACS_ROOT/bin/g_rama
+# export GMX=$(which gmx)
 
 # Files for running the system inside of GROMACS.
 
