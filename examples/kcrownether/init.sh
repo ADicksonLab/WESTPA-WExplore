@@ -12,7 +12,7 @@ mkdir seg_logs traj_segs istates
 # Create our reference state.
 echo -e "4 \n" | gmx trjconv -f bstates/0/seg.gro -s bstates/0/seg.tpr -n 18-crown-6-K+.ndx -o initial_bin_struct.pdb || exit 1
 
-cat initial_bin_struct.pdb | tail -n +6 | head -n -2 > 18-crown-6-K+.pdb
+cat initial_bin_struct.pdb | grep '^ATOM' | grep K\+ > 18-crown-6-K+.pdb
 rm initial_bin_struct.pdb
 BSTATE_ARGS="--bstates-from BASIS_STATES.single"
 

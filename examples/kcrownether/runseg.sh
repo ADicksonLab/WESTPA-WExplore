@@ -83,5 +83,5 @@ echo -e "4 \n" | gmx trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o pcoord.pdb 
 # pcoord loader to analyze the RMSD and go from there.
 #cat pcoord.pdb
 #cat pcoord.pdb | tail -n +6 | head -n -2 > $WEST_PCOORD_RETURN || exit 1
-cat pcoord.pdb | sed '/TER/,+1 d' | sed '/REMARK/,+1 d' | sed '/MODEL/ d' > $WEST_PCOORD_RETURN || exit 1
-
+#cat pcoord.pdb | sed '/TER/,+1 d' | sed '/REMARK/,+1 d' | sed '/MODEL/ d' > $WEST_PCOORD_RETURN || exit 1
+cat pcoord.pdb | grep '^ATOM' | grep K\+ > $WEST_PCOORD_RETURN || exit 1

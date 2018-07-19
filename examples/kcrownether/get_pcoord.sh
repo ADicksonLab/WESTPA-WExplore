@@ -25,8 +25,7 @@ trap cleanup EXIT
 
 echo $NDX
 echo -e "4 \n" | gmx trjconv -f $WEST_STRUCT_DATA_REF.gro  -s $WEST_STRUCT_DATA_REF.tpr -n $NDX -o pcoord.$$.pdb || exit 1
-cat pcoord.$$.pdb
-cat pcoord.$$.pdb | tail -n +6 | head -n -2 > $WEST_PCOORD_RETURN
+cat pcoord.$$.pdb | grep '^ATOM' | grep K\+ > $WEST_PCOORD_RETURN
 
 if [ -n "$SEG_DEBUG" ] ; then
     head -v $WEST_PCOORD_RETURN
