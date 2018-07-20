@@ -47,13 +47,15 @@ case $HOSTNAME in
 	# Put in stuff here that you'd want to use on your local machine,
 	# for instance.
 	# We're assuming that we have GROMACS installed and in our path, here.
-	module load anaconda
+#	module load anaconda
+module load python/anaconda2.7-4.2.0
 	source activate WESTPA-WExplore
 	source $CONDA_PREFIX/westpa-2017.10/westpa.sh
     export GROMACS_ROOT='/ihome/lchong/ajp105/apps/gromacs-4.6.3-gcc-sse4.1/'
     export PATH="$GROMACS_ROOT/bin/:$PATH"
 	export USE_LOCAL_SCRATCH=1
-	export SCRATCH=/tmp
+	#export SCRATCH=/tmp
+    export WEST_SIM_ROOT="$PWD"
 
 esac
 

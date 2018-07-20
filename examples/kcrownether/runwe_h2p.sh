@@ -2,9 +2,9 @@
 #SBATCH --nodes=20
 ##SBATCH --ntasks-per-node=20
 ##SBATCH --ntasks-per-core=1
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=28
 #SBATCH --time=12:00:00
-#SBATCH --job-name=K02
+#SBATCH --job-name=KWETEST
 #SBATCH --output=many-serial-jobs.out
 #SBATCH --cluster=mpi
 #SBATCH --qos=normal
@@ -43,7 +43,7 @@ ulimit -s unlimited
 srun -n $SLURM_NNODES mkdir -p $LOCAL
 
 # Launch srun many times
-for i in {0..19}; do
+for i in {0..2}; do
     srun --exclusive -N1 -n1 $WEST_SIM_ROOT/node.sh --work-manager=zmq --zmq-mode=client --n-workers=28 --zmq-read-host-info=$SERVER_INFO --zmq-comm-mode=tcp &
 done
 wait
