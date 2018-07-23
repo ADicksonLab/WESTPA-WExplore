@@ -32,7 +32,7 @@ class System(WESTSystem):
         atom_coords = atom_coords.astype(float).flatten()
         self.bin_mapper.centers = [atom_coords]
         self.bin_mapper.add_bin(None, 0)
-        self.max_replicas = 20
+        self.max_replicas = 48
         self.bin_target_counts = self.bin_mapper.balance_replicas(self.max_replicas,
                                 np.array([0,], np.int_))
 
