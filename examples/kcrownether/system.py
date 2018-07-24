@@ -45,12 +45,16 @@ def pcoord_loader(fieldname, pcoord_return_filename, destobj, single_point):
     """
     
     system = westpa.rc.get_system_driver()
+    natoms = 1
     
     assert fieldname == 'pcoord'
     
     init_struct = np.loadtxt(pcoord_return_filename, dtype=str)
     # We're pulling in columns 5, 6, and 7 because this is where the X,Y,Z coords are in the pdb.
-    atom_coords = init_struct[5:8]
+    try:
+        atom_coords = init_struct[:,5:8]
+    except:
+        atom_coords = init_struct[5:8]
     pcoord = atom_coords.astype(float).flatten()
     
     if single_point:
@@ -60,7 +64,7 @@ def pcoord_loader(fieldname, pcoord_return_filename, destobj, single_point):
     else:
         # We want to reshape the progress coordinate so that each row is a frame,
         # and each dimension is the number of atoms * 3.
-        pcoord.shape = (11, 43*3)
+        pcoord.shape = (11, natoms*3)
         expected_shape = (system.pcoord_len, system.pcoord_ndim)
         if pcoord.ndim == 1:
             pcoord.shape = (len(pcoord),1)
