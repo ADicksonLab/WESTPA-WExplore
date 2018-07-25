@@ -14,8 +14,13 @@ log = logging.getLogger(__name__)
 log.debug('loading module %r' % __name__)
 
 def dfunc(p, centers):
-    ncenters = centers.shape[0]
-    d = np.array([np.linalg.norm((p - c))/len(p/3) for c in centers], dtype=np.float32)
+    d = np.array([np.linalg.norm((p - c)) for c in centers], dtype=np.float32)
+
+    # the above is the Frobenius norm, for RMSD divide by N^1/2, where N is number of atoms
+    # (Note that p has length 3*N)
+    
+    d /= math.sqrt(len(p)/3)
+    
     return d
 
 class System(WESTSystem):
@@ -25,7 +30,7 @@ class System(WESTSystem):
         self.pcoord_len = 11
         self.pcoord_dtype = np.float32
 
-        self.bin_mapper = wexplore.WExploreBinMapper(n_regions=[10,10,10], d_cut=[10, 5.0, 1.0], dfunc=dfunc)
+        self.bin_mapper = wexplore.WExploreBinMapper(n_regions=[10,10,10], d_cut=[5, 2.0, 0.8], dfunc=dfunc)
         # The initial center is on the coordinates of one of the basis states.
         init_struct = np.loadtxt('18-crown-6-K+.pdb', dtype=str)
         atom_coords = init_struct[5:8]
