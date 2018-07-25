@@ -14,8 +14,13 @@ log = logging.getLogger(__name__)
 log.debug('loading module %r' % __name__)
 
 def dfunc(p, centers):
-    ncenters = centers.shape[0]
-    d = np.array([np.linalg.norm((p - c))/len(p/3) for c in centers], dtype=np.float32)
+    d = np.array([np.linalg.norm((p - c)) for c in centers], dtype=np.float32)
+
+    # the above is the Frobenius norm, for RMSD divide by N^1/2, where N is number of atoms
+    # (Note that p has length 3*N)
+    
+    d /= math.sqrt(len(p)/3)
+    
     return d
 
 class System(WESTSystem):
@@ -25,7 +30,7 @@ class System(WESTSystem):
         self.pcoord_len = 11
         self.pcoord_dtype = np.float32
 
-        self.bin_mapper = wexplore.WExploreBinMapper(n_regions=[10,10,10], d_cut=[10, 5.0, 1.0], dfunc=dfunc)
+        self.bin_mapper = wexplore.WExploreBinMapper(n_regions=[10,10,10], d_cut=[5, 2.0, 0.8], dfunc=dfunc)
         # The initial center is on the coordinates of one of the basis states.
         init_struct = np.loadtxt('18-crown-6-K+.pdb', dtype=str)
         atom_coords = init_struct[5:8]
@@ -45,12 +50,16 @@ def pcoord_loader(fieldname, pcoord_return_filename, destobj, single_point):
     """
     
     system = westpa.rc.get_system_driver()
+    natoms = 1
     
     assert fieldname == 'pcoord'
     
     init_struct = np.loadtxt(pcoord_return_filename, dtype=str)
     # We're pulling in columns 5, 6, and 7 because this is where the X,Y,Z coords are in the pdb.
-    atom_coords = init_struct[5:8]
+    try:
+        atom_coords = init_struct[:,5:8]
+    except:
+        atom_coords = init_struct[5:8]
     pcoord = atom_coords.astype(float).flatten()
     
     if single_point:
@@ -60,7 +69,7 @@ def pcoord_loader(fieldname, pcoord_return_filename, destobj, single_point):
     else:
         # We want to reshape the progress coordinate so that each row is a frame,
         # and each dimension is the number of atoms * 3.
-        pcoord.shape = (11, 43*3)
+        pcoord.shape = (11, natoms*3)
         expected_shape = (system.pcoord_len, system.pcoord_ndim)
         if pcoord.ndim == 1:
             pcoord.shape = (len(pcoord),1)

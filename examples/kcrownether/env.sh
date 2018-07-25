@@ -3,7 +3,7 @@
 
 export SCRATCH='/Users/alexrd/research/WESTPA-WExplore/scratch'
 export WEST_ROOT='/Users/alexrd/research/westpa/'
-export GROMACS_ROOT='/Users/alexrd/research/gromacs-2018.2/'
+export GROMACS_ROOT='/Users/alexrd/research/gromacs-2018.2/build'
 export WEST_PYTHONPATH='/Users/alexrd/research/WESTPA-WExplore/westpa_wexplore'
 
 export PATH="$WEST_PYTHONPATH:$PWD:$ANACONDA_ROOT/bin:$WEST_ROOT/bin/:$GROMACS_ROOT/bin/:$PATH"

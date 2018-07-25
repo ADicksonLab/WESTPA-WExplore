@@ -1,0 +1,5 @@
+To run this example, first compile modelsim.py:
+
+```
+python setup.py build_ext --inplace
+```

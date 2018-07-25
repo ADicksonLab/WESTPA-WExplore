@@ -11,5 +11,5 @@ setup(
         'numpy'
     ],
     include_dirs=[np.get_include()],
-    ext_modules = cythonize("westpa_wexplore/wex_utils.pyx","examples/RingPotential/modelsim.pyx")
+    ext_modules = cythonize("westpa_wexplore/wex_utils.pyx")
 )
