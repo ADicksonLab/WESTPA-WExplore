@@ -6,7 +6,7 @@ from west import WESTSystem
 from westpa.binning import RectilinearBinMapper, RecursiveBinMapper, FuncBinMapper
 import westpa
 
-from westpa_wexplore import wexplore, wex_utils
+from wexplore import wexplore, wex_utils
 from scipy.spatial.distance import cdist
 
 import logging
