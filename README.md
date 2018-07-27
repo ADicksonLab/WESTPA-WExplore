@@ -20,13 +20,21 @@ and run `setup.py`:
 python setup.py install
 ```
 
-Then add the `westpa_wexplore` directory to the `$WEST_PYTHONPATH` variable (in bash):
+If you want to run the RingPotential example, this requires an additional step:
+```
+cd examples/RingPotential
+python setup.py build_ext --inplace
+```
+
+Also, to allow WESTPA to find this plugin, add the `westpa_wexplore` directory to the `$WEST_PYTHONPATH` variable in the `env.sh` script:
 
 ```
-export WEST_PYTHONPATH=`ls -lrt -d -1 $PWD/westpa_wexplore`
+export WEST_PYTHONPATH=[your-WESTPA-WExplore-path]/westpa_wexplore
 ```
 
 # Dependencies
+
+WESTPA should already be installed on your system, see [this page](https://westpa.github.io/westpa/sphinx_index.html#installation) for installation instructions.
 
 # Contributors
 This work was done almost entirely by Josh Adelman (@synapticarbors) and Audrey Pratt (@ajoshpratt).

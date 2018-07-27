@@ -81,7 +81,5 @@ echo -e "4 \n" | $GMX trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o pcoord.pdb
 
 # Copy in the imaged trajectory as the progress coordinate.  We'll use a python
 # pcoord loader to analyze the RMSD and go from there.
-#cat pcoord.pdb
-#cat pcoord.pdb | tail -n +6 | head -n -2 > $WEST_PCOORD_RETURN || exit 1
-cat pcoord.pdb | sed '/TER/,+1 d' | sed '/REMARK/,+1 d' | sed '/MODEL/ d' > $WEST_PCOORD_RETURN || exit 1
-
+echo "2 9" | gmx trjconv -fit rot+trans -s bound_state.tpr -f pcoord.pdb -o pcoord_align.pdb
+cat pcoord_align.pdb | grep '^ATOM' | grep K\+ > $WEST_PCOORD_RETURN || exit 1
