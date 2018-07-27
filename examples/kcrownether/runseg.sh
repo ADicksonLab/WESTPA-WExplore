@@ -74,12 +74,11 @@ $GMX mdrun -s seg.tpr -o seg.trr -x seg.xtc -c seg.gro \
 echo -e "0 \n" | $GMX trjconv    -f seg.trr  -s parent_imaged.gro  -n $NDX -o none.xtc  -pbc none || exit 1
 echo -e "0 \n" | $GMX trjconv    -f none.xtc  -s parent_imaged.gro  -n $NDX -o whole.xtc -pbc whole || exit 1
 echo -e "0 \n" | $GMX trjconv    -f whole.xtc  -s parent_imaged.gro  -n $NDX -o nojump.xtc -pbc nojump || exit 1
-# This next command needs the exact timepoint for -b.
-echo -e "0 \n" | $GMX trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o imaged_ref.gro -b -1 || exit 1
+# This next command needs the exact timepoint for -b, in ps.  As this uses a 2 ps tau, to get the final frame, we specify 2.
+echo -e "0 \n" | $GMX trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o imaged_ref.gro -b 2 || exit 1
 echo -e "4 \n" | $GMX trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o pcoord.pdb || exit 1
-#trjconv -f seg.trr -o solvent.xtc
 
 # Copy in the imaged trajectory as the progress coordinate.  We'll use a python
 # pcoord loader to analyze the RMSD and go from there.
-echo "2 9" | gmx trjconv -fit rot+trans -s bound_state.tpr -f pcoord.pdb -o pcoord_align.pdb
+echo "2 9" | $GMX trjconv -fit rot+trans -s bound_state.tpr -f pcoord.pdb -o pcoord_align.pdb
 cat pcoord_align.pdb | grep '^ATOM' | grep K\+ > $WEST_PCOORD_RETURN || exit 1
