@@ -3,8 +3,6 @@
 # Assume that we're using Anaconda.  The reason why we're doing this is what we need a pre-2.0 NetworkX
 
 # Edit this to load up the proper anaconda version that you're using.  Remember that WESTPA needs python2, right now.
-#module load anaconda
-#module load python/anaconda2.7-4.2.0_westpa
 module load python/anaconda2.7-4.2.0
 
 # Destroy the environment, if it exists
@@ -17,15 +15,11 @@ conda create --name WESTPA-WExplore
 conda install -c conda-forge westpa -n WESTPA-WExplore
 conda install -c anaconda pandas cython -n WESTPA-WExplore
 conda install -c BjornFJohansson networkx=1.9.1 -n WESTPA-WExplore
-#conda install -c anaconda cython -n WESTPA-WExplore
 
-#conda install -c anaconda pandas cython -c conda-forge westpa -c BjornFJohansson networkx=1.9.1 -n WESTPA-WExplore
-
-# Create symlinks that we need to ensure everything imports/starts.
-# You'll probably need to run python setup.py within this directory, as well.
-#ln -sv wexplore-westpa.josh/wexplore wexplore
+# Activate the conda environment we just created
 source activate WESTPA-WExplore
+
+# Build cython extensions
 cd westpa_wexplore
-#python setup.py install
 python setup.py build
-#ln -sv lib/python2.7/site-packages/wex_utils.so .
+python setup.py install --user
