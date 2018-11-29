@@ -136,7 +136,7 @@ class WExploreBinMapper(BinMapper):
             centers = self.fetch_centers(level_indices)
             ncenters = len(centers)
 
-            parent_nodes = [G.predecessors(ix)[0] for ix in level_indices]
+            parent_nodes = [list(G.predecessors(ix))[0] for ix in level_indices]
 
             mask = np.ones((ncenters,), dtype=np.bool_)
             output = np.empty((ncenters,), dtype=index_dtype)
@@ -189,7 +189,7 @@ class WExploreBinMapper(BinMapper):
             return self.last_assignment
 
         # List of coordinate indices assigned to each node
-        nx.set_node_attributes(G, 'coord_ix', None)
+        nx.set_node_attributes(G, None, name='coord_ix')
 
         # List of new bins to potentially add at end of the routine.
         new_bins = []
@@ -214,7 +214,7 @@ class WExploreBinMapper(BinMapper):
         for lid in xrange(1, self.n_levels):
             next_obs_nodes = []
             for nix in obs_nodes:
-                successors = G.successors(nix)
+                successors = list(G.successors(nix))
                 centers = self.fetch_centers(successors)
                 grp_coord_ix = G.node[nix]['coord_ix']
                 grp_coords = coords.take(grp_coord_ix, axis=0)
@@ -242,7 +242,7 @@ class WExploreBinMapper(BinMapper):
             cix = G.node[nix]['coord_ix']
             output[cix] = bin_map[nix]
 
-        #nx.set_node_attributes(G, 'coord_ix', None)
+        #nx.set_node_attributes(G, None, name='coord_ix')
 
         self.last_coords = coords
         self.last_mask = mask
@@ -323,13 +323,13 @@ class WExploreBinMapper(BinMapper):
         if level == 0 and len(self.level_indices[0]) + 1 > self.n_regions[0]:
             return
         elif level > 0:
-            if len(self.bin_graph.successors(parent)) + 1 > self.n_regions[level]:
+            if len(list(self.bin_graph.successors(parent))) + 1 > self.n_regions[level]:
                 return
 
         bin_index = self.next_bin_index
         self.level_indices[level].append(bin_index)
-        self.bin_graph.add_node(bin_index, 
-                {'center_ix': center_ix,
+        self.bin_graph.add_node(bin_index,
+                **{'center_ix': center_ix,
                  'level': level})
 
         self.bin_graph.add_edge(parent, bin_index)
@@ -352,7 +352,7 @@ class WExploreBinMapper(BinMapper):
         G = self.bin_graph.subgraph(self.bin_graph.nodes())
 
         # Set min number of replicas for lowest level bin in the hierarchy
-        nx.set_node_attributes(G, 'nreplicas', 0)
+        nx.set_node_attributes(G, 0, name='nreplicas')
         for bi in occupied_bins:
             G.node[self.level_indices[-1][bi]]['nreplicas'] = 1
 
