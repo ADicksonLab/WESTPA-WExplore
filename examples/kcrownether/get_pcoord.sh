@@ -17,8 +17,8 @@ trap cleanup EXIT
 # Get progress coordinate
 
 echo $NDX
-echo -e "4 \n" | gmx trjconv -f $WEST_STRUCT_DATA_REF.gro  -s $WEST_STRUCT_DATA_REF.tpr -n $NDX -o pcoord.$$.pdb || exit 1
-echo "2 9" | gmx trjconv -fit rot+trans -s bound_state.tpr -f pcoord.$$.pdb -o pcoord_align.$$.pdb
+echo -e "4 \n" | $GMX trjconv -f $WEST_STRUCT_DATA_REF.gro  -s $WEST_STRUCT_DATA_REF.tpr -n $NDX -o pcoord.$$.pdb || exit 1
+echo "2 9" | $GMX trjconv -fit rot+trans -s bound_state.tpr -f pcoord.$$.pdb -o pcoord_align.$$.pdb
 cat pcoord_align.$$.pdb | grep '^ATOM' | grep K\+ > $WEST_PCOORD_RETURN
 
 if [ -n "$SEG_DEBUG" ] ; then

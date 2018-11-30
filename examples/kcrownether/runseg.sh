@@ -45,7 +45,7 @@ case $WEST_CURRENT_SEG_INITPOINT_TYPE in
         $STAGEIN $WEST_PARENT_DATA_REF/seg.trr ./parent.trr
         $STAGEIN $WEST_PARENT_DATA_REF/seg.edr ./parent.edr
         $STAGEIN $WEST_PARENT_DATA_REF/imaged_ref.gro ./parent_imaged.gro
-        gmx grompp -f md.mdp -c parent.gro -t parent.trr -p $TOP -o seg.tpr -n $NDX -maxwarn 2 -e parent.edr || exit 1
+        $GMX grompp -f md.mdp -c parent.gro -t parent.trr -p $TOP -o seg.tpr -n $NDX -maxwarn 2 -e parent.edr || exit 1
     ;;
 
     SEG_INITPOINT_NEWTRAJ)
@@ -55,7 +55,7 @@ case $WEST_CURRENT_SEG_INITPOINT_TYPE in
         $STAGEIN $WEST_PARENT_DATA_REF.trr ./initial.trr
         $STAGEIN $WEST_PARENT_DATA_REF.edr ./initial.edr
         $STAGEIN $WEST_PARENT_DATA_REF.gro ./parent_imaged.gro
-        gmx grompp -f md.mdp -c initial.gro -p $TOP -o seg.tpr -n $NDX -maxwarn 2 -t initial.trr -e initial.edr|| exit 1
+        $GMX grompp -f md.mdp -c initial.gro -p $TOP -o seg.tpr -n $NDX -maxwarn 2 -t initial.trr -e initial.edr|| exit 1
     ;;
 
     *)
@@ -66,20 +66,19 @@ esac
     
 # Propagate segment
 export OMP_NUM_THREADS=1
-gmx mdrun -s seg.tpr -o seg.trr -x seg.xtc -c seg.gro \
+$GMX mdrun -s seg.tpr -o seg.trr -x seg.xtc -c seg.gro \
       -e seg.edr -g seg.log -nt 1 \
       || exit 1
 
 # Image trajectory (to correct for jumps out of the box).
-echo -e "0 \n" | gmx trjconv    -f seg.trr  -s parent_imaged.gro  -n $NDX -o none.xtc  -pbc none || exit 1
-echo -e "0 \n" | gmx trjconv    -f none.xtc  -s parent_imaged.gro  -n $NDX -o whole.xtc -pbc whole || exit 1
-echo -e "0 \n" | gmx trjconv    -f whole.xtc  -s parent_imaged.gro  -n $NDX -o nojump.xtc -pbc nojump || exit 1
-# This next command needs the exact timepoint for -b.
-echo -e "0 \n" | gmx trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o imaged_ref.gro -b -1 || exit 1
-echo -e "4 \n" | gmx trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o pcoord.pdb || exit 1
-#trjconv -f seg.trr -o solvent.xtc
+echo -e "0 \n" | $GMX trjconv    -f seg.trr  -s parent_imaged.gro  -n $NDX -o none.xtc  -pbc none || exit 1
+echo -e "0 \n" | $GMX trjconv    -f none.xtc  -s parent_imaged.gro  -n $NDX -o whole.xtc -pbc whole || exit 1
+echo -e "0 \n" | $GMX trjconv    -f whole.xtc  -s parent_imaged.gro  -n $NDX -o nojump.xtc -pbc nojump || exit 1
+# This next command needs the exact timepoint for -b, in ps.  As this uses a 2 ps tau, to get the final frame, we specify 2.
+echo -e "0 \n" | $GMX trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o imaged_ref.gro -b 2 || exit 1
+echo -e "4 \n" | $GMX trjconv    -f nojump.xtc  -s seg.tpr -n $NDX -o pcoord.pdb || exit 1
 
 # Copy in the imaged trajectory as the progress coordinate.  We'll use a python
 # pcoord loader to analyze the RMSD and go from there.
-echo "2 9" | gmx trjconv -fit rot+trans -s bound_state.tpr -f pcoord.pdb -o pcoord_align.pdb
+echo "2 9" | $GMX trjconv -fit rot+trans -s bound_state.tpr -f pcoord.pdb -o pcoord_align.pdb
 cat pcoord_align.pdb | grep '^ATOM' | grep K\+ > $WEST_PCOORD_RETURN || exit 1

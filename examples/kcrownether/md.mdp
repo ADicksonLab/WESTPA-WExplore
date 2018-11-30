@@ -16,7 +16,7 @@ nstfout                  = 0
 nstlog                   = 5 ; every 1 ps
 nstenergy                = 5 ; every 1 ps
 ; Output frequency and precision for xtc file 
-nstxtcout                = 25 ; every 10 fs  
+nstxtcout                = 100 ; every 10 fs  
 xtc-precision            = 10000
 xtc_grps                 = CRN_K ;don't save the water
 ; NEIGHBORSEARCHING PARAMETERS 
