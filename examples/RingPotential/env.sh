@@ -1,6 +1,5 @@
-export WEST_ROOT='/ihome/lchong/ajp105/apps/westpa/westpa'
-export WEST_PYTHON=$(which python2.7)
+export WEST_ROOT='/your-path-to-westpa'
+export WEST_PYTHON='/your-path-to-python'
 export WM_WORK_MANAGER=serial
 
-export WEST_PYTHONPATH="$HOME/WESTPA-WExplore/westpa_wexplore"
-
+export WEST_PYTHONPATH='/your-path-to-WESTPA_wexplore/'

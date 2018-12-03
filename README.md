@@ -26,11 +26,7 @@ cd examples/RingPotential
 python setup.py build_ext --inplace
 ```
 
-Also, to allow WESTPA to find this plugin, add the `westpa_wexplore` directory to the `$WEST_PYTHONPATH` variable in the `env.sh` script:
-
-```
-export WEST_PYTHONPATH=[your-WESTPA-WExplore-path]/westpa_wexplore
-```
+To run the examples, edit the `env.sh` files in the corresponding directories (e.g. `examples/RingPotential` or `examples/kcrownether`) to include the necessary paths to python, WESTPA, and the WESTPA-WExplore plugin.
 
 # Dependencies
 
