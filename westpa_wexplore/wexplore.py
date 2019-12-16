@@ -2,7 +2,8 @@ import numpy as np
 import networkx as nx
 import pandas as pd
 import heapq
-import cPickle as pickle
+#KFW import cPickle as pickle
+import pickle
 import hashlib
 import logging
 import itertools
@@ -30,7 +31,8 @@ class WExploreBinMapper(BinMapper):
         self.centers = []
 
         # List of bin indices for each level
-        self.level_indices = [[] for k in xrange(self.n_levels)]
+        #KFW self.level_indices = [[] for k in xrange(self.n_levels)]
+        self.level_indices = [[] for k in range(self.n_levels)]
 
         # Directed graph containing that defines the connectivity
         # of the hierarchical bin space.
@@ -102,11 +104,14 @@ class WExploreBinMapper(BinMapper):
         return output
 
     def dump_graph(self):
-        print ''
+        #KFW print ''
+        print('')
         for li, nodes in enumerate(self.level_indices):
-            print 'Level: ', li
+            #KFW print 'Level: ', li
+            print('Level: ', li)
             for nix in nodes:
-                print nix, self.bin_graph.node[nix]
+                #KFW print nix, self.bin_graph.node[nix]
+                print(nix, self.bin_graph.node[nix])
 
     def _distribute_to_children(self, G, output, coord_indices, node_indices):
         s = pd.Series(output, copy=False)
@@ -144,7 +149,8 @@ class WExploreBinMapper(BinMapper):
 
             self._assign_level(centers, pcenters, mask, output, min_dist)
 
-            for k in xrange(ncenters):
+            #KFW for k in xrange(ncenters):
+            for k in range(ncenters):
                 if output[k] != prev_level_nodes.index(parent_nodes[k]):
                     nix = level_indices[k]
                     succ = nx.algorithms.traversal.dfs_successors(G, nix).values()
@@ -152,7 +158,8 @@ class WExploreBinMapper(BinMapper):
 
         if len(nodes_remove):
             G.remove_nodes_from(nodes_remove)
-            for k in xrange(self.n_levels):
+            #KFW for k in xrange(self.n_levels):
+            for k in range(self.n_levels):
                 self.level_indices[k] = [nix for nix in self.level_indices[k] if nix not in nodes_remove]
 
     def assign(self, coords, mask=None, output=None, add_bins=False):
@@ -211,7 +218,8 @@ class WExploreBinMapper(BinMapper):
             if coord_ix >= 0:
                 new_bins.append((0, None, coord_ix))
 
-        for lid in xrange(1, self.n_levels):
+        #KFW for lid in xrange(1, self.n_levels):
+        for lid in range(1, self.n_levels):
             next_obs_nodes = []
             for nix in obs_nodes:
                 successors = list(G.successors(nix))
@@ -360,7 +368,8 @@ class WExploreBinMapper(BinMapper):
         for top_node in self.level_indices[0]:
             for nix in nx.algorithms.traversal.dfs_postorder_nodes(G, top_node):
                 try:
-                    pred = G.pred[nix].keys()[0]   # parent node
+                    #KFW pred = G.pred[nix].keys()[0]   # parent node
+                    pred = list(G.pred[nix].keys())[0]   # parent node
                     G.node[pred]['nreplicas'] += G.node[nix]['nreplicas']
                 except IndexError:
                     pass
